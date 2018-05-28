@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+</html>
+<script type="text/javascript">
+	function Aaa(name){
+		this.name=[1,2,3]
+	}
+	Aaa.prototype.sayHello=function(){
+		alert(this.name)
+	}
+
+	var a1=new Aaa();
+	
+	function Bbb(){
+		Aaa.call(this)
+	}
+	
+	var F=function(){}
+	F.prototype=Aaa.prototype
+	Bbb.prototype=new F()
+	Bbb.prototype.constructor=Bbb //修正指向问题
+	//这种方式其实就是原型链继承，但是有个弊端，只有这一句话，b1的constructor就会被覆盖成Aaa,
+	//解决办法就是手动修改b1的constructoor，但未实际解决
+	/*为什么没有实际解决
+	 * 比如name=[1,2,4]
+	 * b1.name.push(4);
+	 * var b2=new Bbb();
+	 * alert(b2.name) //[1,2,3,4]
+	 * 
+	 * 发现b1修改后，影响了b2，那怎么办？？？？？
+	 * 
+	 * 1.属性和方法继承的时候要分开继承,加上这两句；
+	 * 	var F=function(){}
+		F.prototype=Aaa.prototype
+		Bbb.prototype=new F()
+	 * 
+	 * b1=>Bbb=>F=>Aaa
+	 * 原因就是，原型链上继承，避免属性继承，只是方法继承。
+	 *  var F=function(){}
+		F.prototype=Aaa.prototype
+		这么写就意思是把shouName方法继承过去了，屏蔽掉name属性，F收不到了name属性，
+		再往下传就不行了，所以手动修改b1，b2指向，这样，b1，b2独立就不会互相影响
+			function Bbb(){
+				Aaa.call(this) //this指的不懂的b1，b2
+			}
+	 */
+	var b1=new Bbb()
+	b1.name.push(4);
+	var b2=new Bbb();
+//	b1.name()
+	alert(b1.name) //1234
+	alert(b2.name) //123
+</script>

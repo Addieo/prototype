@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+</html>
+<script type="text/javascript">
+	var a={
+		name:'小明'
+	}
+	var b=cloneObject(a)
+	b.name='小青'
+	function cloneObject(obj){
+		var F=function(){}
+		F.prototype=obj
+		return new F()
+	}
+//	alert(a.name)
+	alert(b.name)
+</script>
